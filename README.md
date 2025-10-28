@@ -665,11 +665,7 @@ Contributions welcome! Please:
 4. Push to branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
----
 
-## 📄 License
-
-MIT License - feel free to use this project for learning or commercial purposes.
 
 ---
 
@@ -681,12 +677,5 @@ MIT License - feel free to use this project for learning or commercial purposes.
 
 ---
 
-## 📞 Support
-
-- 🐛 **Issues**: [GitHub Issues](https://github.com/yourusername/tensorflow-kotlin-js/issues)
-- 💬 **Discussions**: [GitHub Discussions](https://github.com/yourusername/tensorflow-kotlin-js/discussions)
-- 📧 **Email**: your.email@example.com
-
----
 
 **Built with ❤️ using Kotlin/JS and TensorFlow.js**
