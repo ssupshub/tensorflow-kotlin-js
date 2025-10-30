@@ -3,317 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TensorFlow.js with Kotlin/JS</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-        
-        .container {
-            max-width: 700px;
-            margin: 0 auto;
-        }
-        
-        h1 {
-            color: white;
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 2.2rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-        }
-        
-        .status-bar {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 8px;
-            text-align: center;
-            margin-bottom: 20px;
-            font-weight: 500;
-        }
-        
-        .status-success {
-            background: rgba(76, 175, 80, 0.9);
-        }
-        
-        .status-info {
-            background: rgba(33, 150, 243, 0.9);
-        }
-        
-        .card {
-            background: white;
-            border-radius: 16px;
-            padding: 35px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        }
-        
-        h2 {
-            color: #333;
-            margin-bottom: 10px;
-            font-size: 1.8rem;
-        }
-        
-        p {
-            color: #666;
-            margin-bottom: 25px;
-            line-height: 1.6;
-        }
-        
-        .input-group {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            margin-bottom: 25px;
-        }
-        
-        .input-wrapper {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        label {
-            font-weight: 600;
-            color: #555;
-            margin-bottom: 8px;
-            font-size: 0.9rem;
-        }
-        
-        .input-field {
-            padding: 14px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 16px;
-            transition: all 0.3s;
-            font-family: inherit;
-        }
-        
-        .input-field:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-        
-        .btn {
-            width: 100%;
-            padding: 16px;
-            border: none;
-            border-radius: 10px;
-            font-size: 17px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: inherit;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        
-        .btn-primary:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
-        }
-        
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
-        .result {
-            margin-top: 25px;
-            min-height: 60px;
-        }
-        
-        .success {
-            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
-            border-left: 5px solid #4caf50;
-            padding: 25px;
-            border-radius: 12px;
-            animation: slideIn 0.4s ease-out;
-        }
-        
-        .success h3 {
-            color: #2e7d32;
-            margin-bottom: 20px;
-            font-size: 1.3rem;
-        }
-        
-        .info-section {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            color: #333;
-        }
-        
-        .prediction-class, .confidence {
-            margin: 15px 0;
-            padding: 12px;
-            background: white;
-            border-radius: 8px;
-            color: #333;
-            font-size: 1.05rem;
-        }
-        
-        .highlight {
-            color: #667eea;
-            font-size: 1.3rem;
-            font-weight: bold;
-        }
-        
-        .probabilities {
-            margin-top: 20px;
-            padding: 15px;
-            background: white;
-            border-radius: 8px;
-            color: #333;
-        }
-        
-        .prob-bars {
-            margin-top: 12px;
-        }
-        
-        .prob-item {
-            display: grid;
-            grid-template-columns: 80px 1fr 60px;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-        
-        .prob-label {
-            font-weight: 600;
-            color: #555;
-        }
-        
-        .prob-bar-container {
-            background: #f0f0f0;
-            border-radius: 10px;
-            height: 24px;
-            overflow: hidden;
-        }
-        
-        .prob-bar {
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-            height: 100%;
-            border-radius: 10px;
-            transition: width 0.5s ease-out;
-        }
-        
-        .prob-value {
-            font-weight: 600;
-            color: #667eea;
-            text-align: right;
-        }
-        
-        .error {
-            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
-            border-left: 5px solid #f44336;
-            padding: 20px;
-            border-radius: 12px;
-            color: #c62828;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            animation: shake 0.5s ease-out;
-        }
-        
-        .error .icon {
-            font-size: 2rem;
-        }
-        
-        .loading {
-            text-align: center;
-            padding: 30px;
-            color: #667eea;
-        }
-        
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #667eea;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 15px;
-        }
-        
-        .loading p {
-            color: #667eea;
-            font-weight: 600;
-            margin: 0;
-        }
-        
-        .footer {
-            text-align: center;
-            color: white;
-            margin-top: 30px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 12px;
-        }
-        
-        .footer strong {
-            color: #ffd700;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
-        }
-        
-        @media (max-width: 600px) {
-            .input-group {
-                grid-template-columns: 1fr;
-            }
-            
-            h1 {
-                font-size: 1.6rem;
-            }
-            
-            .card {
-                padding: 25px;
-            }
-            
-            .prob-item {
-                grid-template-columns: 70px 1fr 50px;
-                gap: 8px;
-            }
-        }
-    </style>
+    <meta name="description" content="TensorFlow.js Machine Learning Demo with Kotlin/JS and TypeScript">
+    <title>🤖 TensorFlow.js + Kotlin/JS + TypeScript</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- TensorFlow.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.15.0/dist/tf.min.js"></script>
+    
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="app"></div>
-    <script src="tensorflow-kotlin-js.js"></script>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🤖 TensorFlow.js + TypeScript</h1>
+            <p class="subtitle">Machine Learning Inference with Type Safety</p>
+        </div>
+        
+        <!-- Status Bar -->
+        <div id="status" class="status-bar">
+            Loading neural network model...
+        </div>
+        
+        <!-- Main Card -->
+        <div class="card">
+            <h2>Neural Network Prediction</h2>
+            <p class="description">
+                This application demonstrates real-time machine learning inference with full TypeScript type safety.
+                All processing happens in your browser—no server calls, complete privacy!
+            </p>
+            
+            <!-- Info Box -->
+            <div class="info-box">
+                <div class="info-box-icon">💡</div>
+                <div class="info-box-content">
+                    <div class="info-box-title">How it works</div>
+                    <div class="info-box-text">
+                        Enter 4 numerical values between 0 and 1. The neural network will classify your input 
+                        into one of three classes with confidence scores. Built with TypeScript for type safety!
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Input Section -->
+            <div class="input-section-title">Input Values (0.0 - 1.0)</div>
+            <div id="app"></div>
+            
+            <!-- Footer -->
+            <div class="footer">
+                <p>Built with <strong>TypeScript</strong>, <strong>Kotlin/JS</strong> and <strong>TensorFlow.js</strong></p>
+                <div class="tech-stack">
+                    <span class="tech-badge">TypeScript 5.3</span>
+                    <span class="tech-badge">Kotlin 1.9.22</span>
+                    <span class="tech-badge">TensorFlow.js 4.15</span>
+                    <span class="tech-badge">Webpack</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- TypeScript Bundle -->
+    <script type="module" src="build/typescript/main.js"></script>
 </body>
 </html>

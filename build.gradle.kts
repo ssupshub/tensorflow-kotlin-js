@@ -32,8 +32,29 @@ kotlin {
             dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-html-js:0.11.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.7.3")
+                
+                // TensorFlow.js
                 implementation(npm("@tensorflow/tfjs", "4.15.0"))
+                
+                // TypeScript support
+                implementation(npm("typescript", "5.3.3"))
+                implementation(npm("ts-loader", "9.5.1"))
             }
         }
     }
+}
+
+// Task to compile TypeScript
+tasks.register<Exec>("compileTypeScript") {
+    commandLine("npx", "tsc")
+    workingDir = file("src/jsMain/typescript")
+}
+
+// Make webpack depend on TypeScript compilation
+tasks.named("browserDevelopmentWebpack") {
+    dependsOn("compileTypeScript")
+}
+
+tasks.named("browserProductionWebpack") {
+    dependsOn("compileTypeScript")
 }
